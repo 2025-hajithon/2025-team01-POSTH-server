@@ -17,6 +17,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.attribute.UserPrincipal;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/question")
@@ -33,12 +35,16 @@ public class QuestionController {
     }
 
     @GetMapping
-    public ResponseEntity<QuestionResponse> getRandomQuestionByCategory(
+    public ResponseEntity<?> getRandomQuestionByCategory(
             @RequestParam("category") QuestionCategory category) {
 
-        QuestionResponse question = questionService.getRandomQuestionByCategory(category);
+        Optional<QuestionResponse> optionalQuestion = questionService.getRandomQuestionByCategory(category);
 
-        return ResponseEntity.ok(question);
+        if (optionalQuestion.isPresent()) {
+            return ResponseEntity.ok(optionalQuestion.get());
+        } else {
+            return ResponseEntity.ok(Map.of("message", "해당 카테고리에 답변 가능한 질문이 없습니다."));
+        }
     }
 
     @PostMapping("/{questionId}/reply")
