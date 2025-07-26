@@ -3,6 +3,8 @@ package com.posth.posth.domain.question;
 import com.posth.posth.domain.common.BaseEntity;
 import com.posth.posth.domain.member.Member;
 import com.posth.posth.domain.question.ENUM.QuestionCategory;
+import com.posth.posth.domain.question.ENUM.QuestionStatus;
+import com.posth.posth.domain.reply.domain.Reply;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,15 +35,21 @@ public class Question extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-//    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Reply> replies = new ArrayList<>();
+    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
+    private Reply reply;
 
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private QuestionStatus status = QuestionStatus.OPEN;
 
     @Builder
     public Question(QuestionCategory category, String content, Member member) {
         this.category = category;
         this.content = content;
         this.member = member;
+    }
+
+    public void close(){
+        this.status=QuestionStatus.CLOSED;
     }
 }

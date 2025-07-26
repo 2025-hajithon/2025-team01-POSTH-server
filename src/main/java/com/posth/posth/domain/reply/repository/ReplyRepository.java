@@ -12,5 +12,5 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     List<Reply> findAllByMember(Member member);
 
     @Query("select r from Reply r where r.question.member = :member and not r.isRead")
-    List<Reply> findAllByQuestion_Member(Member member);
+    List<Reply> findUnreadRepliesByQuestionAuthor(Member member);
 }

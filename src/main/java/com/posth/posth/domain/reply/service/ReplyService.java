@@ -4,11 +4,8 @@ import com.posth.posth.domain.member.Member;
 import com.posth.posth.domain.question.Question;
 import com.posth.posth.domain.question.QuestionRepository;
 import com.posth.posth.domain.question.dto.ReplyCreateRequest;
-import com.posth.posth.domain.reply.domain.Reaction;
 import com.posth.posth.domain.reply.domain.Reply;
-import com.posth.posth.domain.reply.dto.request.ReactionCreateRequest;
 import com.posth.posth.domain.reply.dto.response.ReplyResponse;
-import com.posth.posth.domain.reply.repository.ReactionRepository;
 import com.posth.posth.domain.reply.repository.ReplyRepository;
 import com.posth.posth.global.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +20,12 @@ public class ReplyService {
 
     private final ReplyRepository replyRepository;
     private final AuthUtil authUtil;
-    private final ReactionRepository reactionRepository;
 
     @Transactional(readOnly = true)
     public List<Long> getReplies() {
         Member member = authUtil.getCurrentMember();
 
-        return replyRepository.findAllByQuestion_Member(member)
+        return replyRepository.findUnreadRepliesByQuestionAuthor(member)
                 .stream()
                 .map(Reply::getId)
                 .toList();
@@ -55,33 +51,5 @@ public class ReplyService {
 
         replyRepository.save(reply);
         return reply.getId();
-    }
-
-    @Transactional
-    public void createReply(Long replyId, ReactionCreateRequest request) {
-        Member member = authUtil.getCurrentMember();
-        Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new RuntimeException("reply 가 존재하지 않습니다."));
-
-        if (!reply.getQuestion().getMember().equals(member)) {
-            throw new RuntimeException("나의 질문에 대한 답변이 아닙니다.");
-        }
-
-        String goodThings = "";
-        for (int i = 0; i < request.goodThings().size(); i++) {
-            goodThings += request.goodThings().get(i).toString();
-            if (i < request.goodThings().size() - 1) {
-                goodThings += ",";
-            }
-        }
-
-        Reaction reaction = Reaction.create(
-                request.reactionType(),
-                goodThings,
-                request.thankMessage(),
-                reply
-        );
-
-        reactionRepository.save(reaction);
     }
 }
