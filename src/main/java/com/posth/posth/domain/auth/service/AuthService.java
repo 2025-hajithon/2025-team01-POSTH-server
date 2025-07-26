@@ -23,7 +23,7 @@ public class AuthService {
 
         if (encoder.matches(request.password(), member.getPassword())) {
             String token = jwtUtil.generateToken(request.loginId());
-            return new LoginResponse(token);
+            return new LoginResponse(token, member.getNickname());
         }
 
         throw new RuntimeException("비밀번호가 일치하지 않습니다.");
