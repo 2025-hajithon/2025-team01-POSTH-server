@@ -1,6 +1,6 @@
 package com.posth.posth.domain.question;
 
-import com.posth.posth.domain.question.ENUM.QuestionCategory;
+import com.posth.posth.domain.member.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
