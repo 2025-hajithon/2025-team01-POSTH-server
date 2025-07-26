@@ -31,6 +31,14 @@ public class Question extends BaseEntity {
     @Column(name = "question_content", nullable = false, length = 3000)
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "question_is_deleted_questioner")
+    private Boolean isDeletedQuestioner;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "question_is_deleted_replier")
+    private Boolean isDeletedReplier;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
