@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: posth
+  datasource:
+    url: "jdbc:mysql://193.122.123.213:3306/posth"
+    username: "posth"
+    password: "posth"
+  jpa:
+    hibernate:
+<<<<<<< HEAD
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+=======
+      ddl-auto: update  # 테이블 자동 생성/업데이트
+    show-sql: true      # SQL 쿼리 로그 출력
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+>>>>>>> e592b56 (chore : 시큐리티 및 예외 설정)
+
+jwt:
+  secret: "QmTz2nhwYgOQ4iKspZrCdAbG+Uw7EMrHtwl0VhA1bS0="
