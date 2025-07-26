@@ -6,8 +6,6 @@ import com.posth.posth.domain.member.Member;
 import com.posth.posth.domain.member.MemberRepository;
 import com.posth.posth.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
