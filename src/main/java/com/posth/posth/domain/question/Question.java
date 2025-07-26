@@ -1,5 +1,6 @@
 package com.posth.posth.domain.question;
 
+import com.posth.posth.domain.common.BaseEntity;
 import com.posth.posth.domain.member.Member;
 import com.posth.posth.domain.question.ENUM.QuestionCategory;
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Question {
+public class Question extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
