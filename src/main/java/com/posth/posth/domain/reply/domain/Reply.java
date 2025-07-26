@@ -32,6 +32,9 @@ public class Reply extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToOne(mappedBy = "reply", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Reaction reaction;
+
     public void read() {
         this.isRead = true;
     }

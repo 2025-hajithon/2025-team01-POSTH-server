@@ -102,4 +102,11 @@ public class MemberService {
                 sortedCountMap
         );
     }
+
+    @Transactional
+    public void withdraw() {
+        Member member = authUtil.getCurrentMember();
+
+        member.withdraw();
+    }
 }

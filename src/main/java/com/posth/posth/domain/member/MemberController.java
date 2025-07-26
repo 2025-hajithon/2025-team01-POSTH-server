@@ -33,4 +33,10 @@ public class MemberController {
         var response = memberService.getMyStatistics();
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/my")
+    public ResponseEntity<String> withdraw() {
+        memberService.withdraw();
+        return ResponseEntity.ok("회원탈퇴가 성공적으로 처리되었습니다.");
+    }
 }

@@ -24,4 +24,10 @@ public class Member extends BaseEntity {
 
     @Column(name = "member_nickname")
     private String nickname;
+
+    public void withdraw() {
+        this.loginId = null;
+        this.password = null; // 비밀번호도 비활성화
+        this.nickname = "탈퇴한 회원"; // 닉네임은 고유해야 할 수 있으므로 덮어쓰기
+    }
 }

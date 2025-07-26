@@ -11,7 +11,12 @@ import java.util.Optional;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
-    @Query("select q from Question q where q.member.id = :memberId and not q.isDeletedQuestioner")
+    @Query(value = "select q from Question q " +
+            "left join fetch q.reply r " +
+            "left join fetch r.member " +
+            "left join fetch r.reaction " +
+            "where q.member.id = :memberId and not q.isDeletedQuestioner",
+            countQuery = "select count(q) from Question q where q.member.id = :memberId and not q.isDeletedQuestioner")
     Page<Question> findByMemberId(Long memberId, Pageable pageable);
 
     @Query(value = "SELECT * FROM question WHERE question_category = :category AND status = 'OPEN' AND member_id <> :memberId ORDER BY RAND() LIMIT 1",
