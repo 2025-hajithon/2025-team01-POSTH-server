@@ -1,6 +1,6 @@
-package com.posth.posth.member;
+package com.posth.posth.domain.member;
 
-import com.posth.posth.member.dto.SignUpRequestDto;
+import com.posth.posth.domain.member.dto.SignUpRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
