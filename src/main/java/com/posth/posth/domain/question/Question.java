@@ -55,6 +55,7 @@ public class Question extends BaseEntity {
         this.member = member;
     }
 
+
     public void close(){
         this.status=QuestionStatus.CLOSED;
     }
