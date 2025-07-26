@@ -2,6 +2,7 @@ package com.posth.posth.domain.reply.controller;
 
 import com.posth.posth.domain.reply.dto.request.ReactionCreateRequest;
 import com.posth.posth.domain.reply.dto.response.ReplyResponse;
+import com.posth.posth.domain.reply.dto.response.ReplySimpleResponse;
 import com.posth.posth.domain.reply.service.ReplyService;
 import jdk.jfr.Frequency;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @GetMapping("/list")
-    public ResponseEntity<List<Long>> getReplies() {
+    public ResponseEntity<List<ReplySimpleResponse>> getReplies() {
         var response = replyService.getReplies();
         return ResponseEntity.ok(response);
     }
