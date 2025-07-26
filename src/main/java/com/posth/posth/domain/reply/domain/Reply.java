@@ -21,6 +21,9 @@ public class Reply extends BaseEntity {
     @Column(name = "reply_content")
     private String content;
 
+    @Column(name = "reply_is_read")
+    private boolean isRead = false;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
     private Question question;
