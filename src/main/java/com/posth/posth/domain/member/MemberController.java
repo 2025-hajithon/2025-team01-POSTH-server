@@ -1,13 +1,11 @@
 package com.posth.posth.domain.member;
 
-import com.posth.posth.domain.member.dto.SignUpRequestDto;
+import com.posth.posth.domain.member.dto.request.SignUpRequestDto;
+import com.posth.posth.domain.member.dto.response.MemberMyPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/member")
@@ -21,5 +19,11 @@ public class MemberController {
         memberService.signUp(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("회원가입이 성공적으로 완료되었습니다.");
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<MemberMyPageResponse> getMyPage() {
+        var response = memberService.getMyPage();
+        return ResponseEntity.ok(response);
     }
 }
