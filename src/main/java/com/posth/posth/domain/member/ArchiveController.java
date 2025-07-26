@@ -20,7 +20,7 @@ public class ArchiveController {
     private final ReplyService replyService;
 
     @GetMapping("/question/list")
-    public ResponseEntity<List<QuestionResponse>> getMyQuestions(Pageable pageable) {
+    public ResponseEntity<List<QuestionResponse>> getMyQuestions() {
         return ResponseEntity.ok(questionService.getMyQuestions());
     }
 
