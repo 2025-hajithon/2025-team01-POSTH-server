@@ -35,7 +35,7 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(questionId);
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<Page<QuestionResponse>> getQuestionsByCategory(
             @RequestParam("category") QuestionCategory category,
             @RequestParam(value = "page", defaultValue = "0") int page) {
