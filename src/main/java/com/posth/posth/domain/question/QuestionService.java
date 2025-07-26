@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,12 +44,11 @@ public class QuestionService {
         return new QuestionResponse(savedQuestion);
     }
 
-    public QuestionResponse getRandomQuestionByCategory(QuestionCategory category) {
+    public Optional<QuestionResponse> getRandomQuestionByCategory(QuestionCategory category) {
         Member member = authUtil.getCurrentMember();
 
         return questionRepository.findRandomOneByCategory(category.name(), member.getId())
-                .map(QuestionResponse::new)
-                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리에 답변 가능한 질문이 없습니다."));
+                .map(QuestionResponse::new);
     }
 
     @Transactional

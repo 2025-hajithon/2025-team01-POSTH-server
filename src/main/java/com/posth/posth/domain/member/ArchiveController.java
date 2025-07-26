@@ -1,4 +1,4 @@
-package com.posth.posth.domain.archive;
+package com.posth.posth.domain.member;
 
 import com.posth.posth.domain.question.QuestionService;
 import com.posth.posth.domain.question.dto.QuestionResponse;
