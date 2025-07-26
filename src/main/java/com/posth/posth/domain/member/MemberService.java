@@ -1,7 +1,8 @@
 package com.posth.posth.domain.member;
 
-import com.posth.posth.domain.member.MemberRepository;
-import com.posth.posth.domain.member.dto.SignUpRequestDto;
+import com.posth.posth.domain.member.dto.request.SignUpRequestDto;
+import com.posth.posth.domain.member.dto.response.MemberMyPageResponse;
+import com.posth.posth.global.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;  // 추가
+    private final AuthUtil authUtil;
 
     @Transactional
     public Long signUp(SignUpRequestDto requestDto) {
@@ -36,5 +38,10 @@ public class MemberService {
 
         Member savedMember = memberRepository.save(member);
         return savedMember.getId();
+    }
+
+    public MemberMyPageResponse getMyPage() {
+        Member member = authUtil.getCurrentMember();
+        return MemberMyPageResponse.from(member);
     }
 }
