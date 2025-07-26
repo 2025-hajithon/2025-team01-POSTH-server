@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # Build Project
-      - name: Set up JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
@@ -42,7 +42,7 @@ jobs:
           tags: ${{ secrets.DOCKER_PROD_IMAGE_TAG }}
 
       # Deploy
-      - name: Access to EC2
+      - name: Access to Server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.PROD_SERVER_HOST }}
