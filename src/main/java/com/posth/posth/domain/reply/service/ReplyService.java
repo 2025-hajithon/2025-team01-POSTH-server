@@ -2,7 +2,6 @@ package com.posth.posth.domain.reply.service;
 
 import com.posth.posth.domain.member.Member;
 import com.posth.posth.domain.question.Question;
-import com.posth.posth.domain.question.QuestionRepository;
 import com.posth.posth.domain.question.dto.ReplyCreateRequest;
 import com.posth.posth.domain.reply.domain.Reaction;
 import com.posth.posth.domain.reply.domain.Reply;
@@ -11,12 +10,15 @@ import com.posth.posth.domain.reply.dto.response.ReplyResponse;
 import com.posth.posth.domain.reply.dto.response.ReplySimpleResponse;
 import com.posth.posth.domain.reply.repository.ReactionRepository;
 import com.posth.posth.domain.reply.repository.ReplyRepository;
+import com.posth.posth.global.exception.exception.ReplyException;
 import com.posth.posth.global.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.posth.posth.global.exception.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +41,7 @@ public class ReplyService {
     @Transactional
     public ReplyResponse getReply(Long replyId) {
         Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다."));
+                .orElseThrow(() -> new ReplyException(REPLY_NOT_EXISTS));
         reply.read();
         return ReplyResponse.from(reply);
     }
@@ -48,10 +50,10 @@ public class ReplyService {
     public ReplyResponse getMySentReplyDetail(Long replyId) {
         Member member = authUtil.getCurrentMember();
         Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다."));
+                .orElseThrow(() -> new ReplyException(REPLY_NOT_EXISTS));
 
         if (!reply.getMember().equals(member)) {
-            throw new RuntimeException("자신이 작성한 답변만 조회할 수 있습니다.");
+            throw new ReplyException(REPLY_NOT_MINE);
         }
 
         return ReplyResponse.from(reply);
@@ -84,10 +86,10 @@ public class ReplyService {
     public void createReaction(Long replyId, ReactionCreateRequest request) {
         Member member = authUtil.getCurrentMember();
         Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new RuntimeException("reply 가 존재하지 않습니다."));
+                .orElseThrow(() -> new ReplyException(REPLY_NOT_EXISTS));
 
         if (!reply.getQuestion().getMember().equals(member)) {
-            throw new RuntimeException("나의 질문에 대한 답변이 아닙니다.");
+            throw new ReplyException(REPLY_NOT_FOR_MY_QUESTION);
         }
 
         String goodThings = "";
@@ -112,10 +114,10 @@ public class ReplyService {
     public void deleteArchiveReply(Long replyId) {
         Member member = authUtil.getCurrentMember();
         Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 reply 입니다."));
+                .orElseThrow(() -> new ReplyException(REPLY_NOT_EXISTS));
 
         if (!reply.getMember().equals(member)) {
-            throw new RuntimeException("내가 작성한 reply 가 아닙니다.");
+            throw new ReplyException(REPLY_NOT_MINE);
         }
 
         reply.getQuestion().deleteArchiveReplier();
