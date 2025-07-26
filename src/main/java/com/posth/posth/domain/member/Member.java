@@ -21,6 +21,6 @@ public class Member {
     @Column(name = "member_password")
     private String password;
 
-    @Column(name = "nickname")
+    @Column(name = "member_nickname")
     private String nickname;
 }
