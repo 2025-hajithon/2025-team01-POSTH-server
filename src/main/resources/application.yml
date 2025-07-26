@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: posth
+  datasource:
+    url: "jdbc:mysql://193.122.123.213:3306/posth"
+    username: "posth"
+    password: "posth"
+
+jwt:
+  secret: "${JWT_SECRET}"
