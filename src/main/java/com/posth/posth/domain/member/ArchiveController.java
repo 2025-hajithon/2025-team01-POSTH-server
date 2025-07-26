@@ -20,8 +20,8 @@ public class ArchiveController {
     private final ReplyService replyService;
 
     @GetMapping("/question/list")
-    public ResponseEntity<Page<QuestionResponse>> getMyQuestions(Pageable pageable) {
-        return ResponseEntity.ok(questionService.getMyQuestions(pageable));
+    public ResponseEntity<List<QuestionResponse>> getMyQuestions(Pageable pageable) {
+        return ResponseEntity.ok(questionService.getMyQuestions());
     }
 
     @GetMapping("/reply/list")

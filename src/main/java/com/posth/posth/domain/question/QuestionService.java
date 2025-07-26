@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.posth.posth.global.exception.ErrorMessage.*;
@@ -63,10 +64,12 @@ public class QuestionService {
         return replyService.createReply(question, requestDto);
     }
 
-    public Page<QuestionResponse> getMyQuestions(Pageable pageable) {
+    public List<QuestionResponse> getMyQuestions() {
         Member member = authUtil.getCurrentMember();
-        return questionRepository.findByMemberId(member.getId(), pageable)
-                .map(QuestionResponse::new);
+        return questionRepository.findByMemberId(member.getId())
+                .stream()
+                .map(QuestionResponse::new)
+                .toList();
     }
 
     public QuestionResponse getQuestion(Long questionId){
