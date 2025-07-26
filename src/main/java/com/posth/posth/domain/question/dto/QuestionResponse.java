@@ -8,6 +8,7 @@ import com.posth.posth.domain.reply.domain.Reply;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -20,7 +21,7 @@ public class QuestionResponse {
     private LocalDateTime replyAt;
     private String replierNickname;
     private ReactionType reactionType;
-    private String goodTypes;
+    private List<Integer> goodTypes;
     private String thankMessage;
 
     public QuestionResponse(Question question) {
