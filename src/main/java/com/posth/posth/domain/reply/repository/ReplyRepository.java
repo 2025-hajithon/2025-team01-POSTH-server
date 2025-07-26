@@ -15,6 +15,8 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
     Integer countByMember(Member member);
 
-    @Query("select r from Reply r where r.member = :member and not r.question.isDeletedReplier")
+    @Query("select r from Reply r " +
+            "left join fetch r.reaction " +
+            "where r.member = :replier and not r.question.isDeletedReplier")
     List<Reply> findAllByMemberAndNotDeletedReplier(Member member);
 }
