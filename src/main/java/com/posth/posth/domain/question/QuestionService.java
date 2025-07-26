@@ -41,7 +41,7 @@ public class QuestionService {
     }
 
     public Page<QuestionResponse> getQuestionsByCategory(QuestionCategory category, Pageable pageable) {
-        Page<Question> questions = questionRepository.findByCategory(category, pageable);
+        Page<Question> questions = questionRepository.findByCategoryRandomly(category.name(), pageable);
 
         return questions.map(QuestionResponse::new);
     }
