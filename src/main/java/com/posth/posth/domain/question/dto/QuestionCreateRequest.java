@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class QuestionCreateRequestDto {
+public class QuestionCreateRequest {
     private QuestionCategory category;
     private String content;
 }
