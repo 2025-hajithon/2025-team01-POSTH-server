@@ -13,9 +13,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Page<Question> findByMemberId(Long memberId, Pageable pageable);
 
-    @Query(value = "SELECT * FROM question WHERE question_category = :category AND status = 'OPEN' ORDER BY RAND() LIMIT 1",
+    @Query(value = "SELECT * FROM question WHERE question_category = :category AND status = 'OPEN' AND member_id <> :memberId ORDER BY RAND() LIMIT 1",
             nativeQuery = true)
-    Optional<Question> findRandomOneByCategory(@Param("category") String category);
-
-    Integer countByMember(Member member);
+    Optional<Question> findRandomOneByCategory(@Param("category") String category, @Param("memberId") Long memberId);
 }

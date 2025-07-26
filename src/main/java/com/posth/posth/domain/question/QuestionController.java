@@ -32,7 +32,7 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(questionService.createQuestion(requestDto));
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<QuestionResponse> getRandomQuestionByCategory(
             @RequestParam("category") QuestionCategory category) {
 
