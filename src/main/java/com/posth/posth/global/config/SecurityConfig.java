@@ -47,10 +47,11 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOriginPatterns(List.of(
-                "http://localhost:5173",
-                "http://localhost:5174",
-                "http://localhost:8080",
-                "http://hajithon.everdu.com"
+                "*"
+//                "http://localhost:5173",
+//                "http://localhost:5174",
+//                "http://localhost:8080",
+//                "http://hajithon.everdu.com"
         ));
 
         configuration.addAllowedHeader("*");
