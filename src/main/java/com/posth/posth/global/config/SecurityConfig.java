@@ -54,7 +54,8 @@ public class SecurityConfig {
                 "http://localhost:5174",
                 "http://localhost:8080",
                 "http://hajithon.everdu.com",
-                "https://hajithon.everdu.com"
+                "https://hajithon.everdu.com",
+                "https://2025-team01-posth-web-red.vercel.app"
         ));
 
         configuration.addAllowedHeader("*");
