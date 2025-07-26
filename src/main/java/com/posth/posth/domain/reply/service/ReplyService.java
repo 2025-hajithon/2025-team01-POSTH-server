@@ -8,6 +8,7 @@ import com.posth.posth.domain.reply.domain.Reaction;
 import com.posth.posth.domain.reply.domain.Reply;
 import com.posth.posth.domain.reply.dto.request.ReactionCreateRequest;
 import com.posth.posth.domain.reply.dto.response.ReplyResponse;
+import com.posth.posth.domain.reply.dto.response.ReplySimpleResponse;
 import com.posth.posth.domain.reply.repository.ReactionRepository;
 import com.posth.posth.domain.reply.repository.ReplyRepository;
 import com.posth.posth.global.util.AuthUtil;
@@ -26,12 +27,12 @@ public class ReplyService {
     private final AuthUtil authUtil;
 
     @Transactional(readOnly = true)
-    public List<Long> getReplies() {
+    public List<ReplySimpleResponse> getReplies() {
         Member member = authUtil.getCurrentMember();
 
         return replyRepository.findUnreadRepliesByQuestionAuthor(member)
                 .stream()
-                .map(Reply::getId)
+                .map(ReplySimpleResponse::from)
                 .toList();
     }
 
