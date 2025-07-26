@@ -7,12 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
-    Page<Question> findByCategory(QuestionCategory category, Pageable pageable);
     Page<Question> findByMemberId(Long memberId, Pageable pageable);
 
-    @Query(value = "SELECT * FROM question WHERE question_category = :category ORDER BY RAND()",
+    @Query(value = "SELECT * FROM question WHERE question_category = :category AND status = 'OPEN' ORDER BY RAND() LIMIT 1",
             nativeQuery = true)
-    Page<Question> findByCategoryRandomly(@Param("category") String category, Pageable pageable);
+    Optional<Question> findRandomOneByCategory(@Param("category") String category);
 }

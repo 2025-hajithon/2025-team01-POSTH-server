@@ -3,6 +3,7 @@ package com.posth.posth.domain.question;
 import com.posth.posth.domain.member.Member;
 import com.posth.posth.domain.member.MemberRepository;
 import com.posth.posth.domain.question.ENUM.QuestionCategory;
+import com.posth.posth.domain.question.ENUM.QuestionStatus;
 import com.posth.posth.domain.question.Question;
 import com.posth.posth.domain.question.QuestionRepository;
 import com.posth.posth.domain.question.dto.QuestionCreateRequest;
@@ -17,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -27,7 +30,7 @@ public class QuestionService {
     private final AuthUtil authUtil;
 
     @Transactional
-    public Long createQuestion(QuestionCreateRequest requestDto) {
+    public QuestionResponse createQuestion(QuestionCreateRequest requestDto) {
         Member member = authUtil.getCurrentMember();
 
         Question question = Question.builder()
@@ -37,22 +40,38 @@ public class QuestionService {
                 .build();
 
         Question savedQuestion = questionRepository.save(question);
-        return savedQuestion.getId();
+        return new QuestionResponse(savedQuestion);
     }
 
-    public Page<QuestionResponse> getQuestionsByCategory(QuestionCategory category, Pageable pageable) {
-        Page<Question> questions = questionRepository.findByCategoryRandomly(category.name(), pageable);
-
-        return questions.map(QuestionResponse::new);
+    public QuestionResponse getRandomQuestionByCategory(QuestionCategory category) {
+        return questionRepository.findRandomOneByCategory(category.name())
+                .map(QuestionResponse::new) // Optional<Question> -> Optional<QuestionResponse>
+                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리에 답변 가능한 질문이 없습니다."));
     }
 
     @Transactional
     public Long createReplyForQuestion(Long questionId, ReplyCreateRequest requestDto) {
-
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문입니다."));
 
-        return replyService.createReply(question,requestDto);
+        if (question.getStatus() == QuestionStatus.CLOSED) {
+            throw new IllegalStateException("이미 답변이 달려 마감된 질문입니다.");
+        }
+
+        question.close();
+
+        return replyService.createReply(question, requestDto);
     }
 
+    public Page<QuestionResponse> getMyQuestions(Pageable pageable) {
+        Member member = authUtil.getCurrentMember();
+        return questionRepository.findByMemberId(member.getId(), pageable)
+                .map(QuestionResponse::new);
+    }
+
+    public QuestionResponse getQuestion(Long questionId){
+        return questionRepository.findById(questionId)
+                .map(QuestionResponse::new)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문입니다."));
+    }
 }

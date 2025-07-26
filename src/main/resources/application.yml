@@ -2,7 +2,7 @@ spring:
   application:
     name: posth
   datasource:
-    url: "jdbc:mysql://193.122.123.213:3306/posth"
+    url: "jdbc:mysql://193.122.123.213:3306/posth?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul"
     username: "posth"
     password: "posth"
   jpa:

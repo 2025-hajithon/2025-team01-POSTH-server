@@ -22,14 +22,14 @@ import java.util.List;
 public class ReplyService {
 
     private final ReplyRepository replyRepository;
-    private final AuthUtil authUtil;
     private final ReactionRepository reactionRepository;
+    private final AuthUtil authUtil;
 
     @Transactional(readOnly = true)
     public List<Long> getReplies() {
         Member member = authUtil.getCurrentMember();
 
-        return replyRepository.findAllByQuestion_Member(member)
+        return replyRepository.findUnreadRepliesByQuestionAuthor(member)
                 .stream()
                 .map(Reply::getId)
                 .toList();
@@ -41,6 +41,26 @@ public class ReplyService {
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다."));
         reply.read();
         return ReplyResponse.from(reply);
+    }
+
+    public ReplyResponse getMySentReplyDetail(Long replyId) {
+        Member member = authUtil.getCurrentMember();
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다."));
+
+        if (!reply.getMember().equals(member)) {
+            throw new RuntimeException("자신이 작성한 답변만 조회할 수 있습니다.");
+        }
+
+        return ReplyResponse.from(reply);
+    }
+
+    public List<ReplyResponse> getMySentReplies() {
+        Member member = authUtil.getCurrentMember();
+        return replyRepository.findAllByMember(member)
+                .stream()
+                .map(ReplyResponse::from)
+                .toList();
     }
 
     @Transactional
@@ -58,7 +78,7 @@ public class ReplyService {
     }
 
     @Transactional
-    public void createReply(Long replyId, ReactionCreateRequest request) {
+    public void createReaction(Long replyId, ReactionCreateRequest request) {
         Member member = authUtil.getCurrentMember();
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new RuntimeException("reply 가 존재하지 않습니다."));

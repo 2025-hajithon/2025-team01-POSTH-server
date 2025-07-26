@@ -26,23 +26,19 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @PostMapping
-    public ResponseEntity<Long> createQuestion(
+    public ResponseEntity<QuestionResponse> createQuestion(
             @RequestBody QuestionCreateRequest requestDto) {
 
-        Long questionId = questionService.createQuestion(requestDto);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(questionId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(questionService.createQuestion(requestDto));
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<Page<QuestionResponse>> getQuestionsByCategory(
-            @RequestParam("category") QuestionCategory category,
-            @RequestParam(value = "page", defaultValue = "0") int page) {
+    @GetMapping()
+    public ResponseEntity<QuestionResponse> getRandomQuestionByCategory(
+            @RequestParam("category") QuestionCategory category) {
 
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<QuestionResponse> questions = questionService.getQuestionsByCategory(category, pageable);
+        QuestionResponse question = questionService.getRandomQuestionByCategory(category);
 
-        return ResponseEntity.ok(questions);
+        return ResponseEntity.ok(question);
     }
 
     @PostMapping("/{questionId}/reply")
