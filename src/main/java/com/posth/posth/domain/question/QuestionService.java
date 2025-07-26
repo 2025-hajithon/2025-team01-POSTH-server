@@ -44,8 +44,10 @@ public class QuestionService {
     }
 
     public QuestionResponse getRandomQuestionByCategory(QuestionCategory category) {
-        return questionRepository.findRandomOneByCategory(category.name())
-                .map(QuestionResponse::new) // Optional<Question> -> Optional<QuestionResponse>
+        Member member = authUtil.getCurrentMember();
+
+        return questionRepository.findRandomOneByCategory(category.name(), member.getId())
+                .map(QuestionResponse::new)
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리에 답변 가능한 질문이 없습니다."));
     }
 
