@@ -9,32 +9,36 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 @RestController
-@RequestMapping("/my")
+@RequestMapping("/member/my/archive")
 @RequiredArgsConstructor
 public class ArchiveController {
 
     private final QuestionService questionService;
     private final ReplyService replyService;
 
-    @GetMapping("/archive/questions")
+    @GetMapping("/question/list")
     public ResponseEntity<Page<QuestionResponse>> getMyQuestions(Pageable pageable) {
         return ResponseEntity.ok(questionService.getMyQuestions(pageable));
     }
 
-    // 내 답변 아카이브 조회 API
-    @GetMapping("/archive/replies")
+    @GetMapping("/reply/list")
     public ResponseEntity<List<ReplyResponse>> getMySentReplies() {
         return ResponseEntity.ok(replyService.getMySentReplies());
     }
 
-    // 우편함(읽지 않은 답장) 조회 API
-    @GetMapping("/inbox/replies")
-    public ResponseEntity<List<Long>> getInboxReplies() {
-        return ResponseEntity.ok(replyService.getReplies());
+    @GetMapping("/question/{questionId}")
+    public ResponseEntity<QuestionResponse> getMySentQuestion(@PathVariable Long questionId){
+        return ResponseEntity.ok(questionService.getQuestion(questionId));
+    }
+
+    @GetMapping("/reply/{replyId}")
+    public ResponseEntity<ReplyResponse> getMySentReplyDetail(@PathVariable Long replyId) {
+        return ResponseEntity.ok(replyService.getMySentReplyDetail(replyId));
     }
 }

@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -65,5 +67,11 @@ public class QuestionService {
         Member member = authUtil.getCurrentMember();
         return questionRepository.findByMemberId(member.getId(), pageable)
                 .map(QuestionResponse::new);
+    }
+
+    public QuestionResponse getQuestion(Long questionId){
+        return questionRepository.findById(questionId)
+                .map(QuestionResponse::new)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문입니다."));
     }
 }

@@ -31,7 +31,7 @@ public class ReplyController {
 
     @PostMapping("/{replyId}/reaction")
     public ResponseEntity<Void> createReaction(@PathVariable Long replyId, @RequestBody ReactionCreateRequest request) {
-        replyService.createReply(replyId, request);
+        replyService.createReaction(replyId, request);
         return ResponseEntity.ok().build();
     }
 }
