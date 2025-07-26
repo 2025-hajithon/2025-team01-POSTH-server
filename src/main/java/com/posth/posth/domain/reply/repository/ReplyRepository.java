@@ -5,14 +5,16 @@ import com.posth.posth.domain.reply.domain.Reply;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
-
-    List<Reply> findAllByMember(Member member);
 
     @Query("select r from Reply r where r.question.member = :member and not r.isRead")
     List<Reply> findUnreadRepliesByQuestionAuthor(Member member);
 
     Integer countByMember(Member member);
+
+    @Query("select r from Reply r where r.member = :member and not r.question.isDeletedReplier")
+    List<Reply> findAllByMemberAndNotDeletedReplier(Member member);
 }

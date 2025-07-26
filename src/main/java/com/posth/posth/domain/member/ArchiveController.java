@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
@@ -37,8 +34,20 @@ public class ArchiveController {
         return ResponseEntity.ok(questionService.getQuestion(questionId));
     }
 
+    @DeleteMapping("/question/{questionId}")
+    public ResponseEntity<Void> deleteMySentQuestion(@PathVariable Long questionId){
+        questionService.deleteArchiveQuestion(questionId);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/reply/{replyId}")
     public ResponseEntity<ReplyResponse> getMySentReplyDetail(@PathVariable Long replyId) {
         return ResponseEntity.ok(replyService.getMySentReplyDetail(replyId));
+    }
+
+    @DeleteMapping("/reply/{replyId}")
+    public ResponseEntity<Void> deleteMySentReply(@PathVariable Long replyId){
+        replyService.deleteArchiveReply(replyId);
+        return ResponseEntity.noContent().build();
     }
 }

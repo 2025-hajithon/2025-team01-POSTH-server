@@ -43,6 +43,7 @@ public class ReplyService {
         return ReplyResponse.from(reply);
     }
 
+    @Transactional(readOnly = true)
     public ReplyResponse getMySentReplyDetail(Long replyId) {
         Member member = authUtil.getCurrentMember();
         Reply reply = replyRepository.findById(replyId)
@@ -55,9 +56,10 @@ public class ReplyService {
         return ReplyResponse.from(reply);
     }
 
+    @Transactional(readOnly = true)
     public List<ReplyResponse> getMySentReplies() {
         Member member = authUtil.getCurrentMember();
-        return replyRepository.findAllByMember(member)
+        return replyRepository.findAllByMemberAndNotDeletedReplier(member)
                 .stream()
                 .map(ReplyResponse::from)
                 .toList();
@@ -103,5 +105,18 @@ public class ReplyService {
         );
 
         reactionRepository.save(reaction);
+    }
+
+    @Transactional
+    public void deleteArchiveReply(Long replyId) {
+        Member member = authUtil.getCurrentMember();
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 reply 입니다."));
+
+        if (!reply.getMember().equals(member)) {
+            throw new RuntimeException("내가 작성한 reply 가 아닙니다.");
+        }
+
+        reply.getQuestion().deleteArchiveReplier();
     }
 }

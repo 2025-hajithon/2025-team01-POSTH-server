@@ -76,4 +76,17 @@ public class QuestionService {
                 .map(QuestionResponse::new)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문입니다."));
     }
+
+    @Transactional
+    public void deleteArchiveQuestion(Long questionId) {
+        Member member = authUtil.getCurrentMember();
+        Question question =  questionRepository.findById(questionId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문입니다."));
+
+        if (!question.getMember().equals(member)) {
+            throw new IllegalStateException("내가 작성한 질문이 아닙니다.");
+        }
+
+        question.deleteArchiveQuestioner();
+    }
 }

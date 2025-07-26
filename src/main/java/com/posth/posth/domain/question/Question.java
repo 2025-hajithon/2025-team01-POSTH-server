@@ -31,6 +31,12 @@ public class Question extends BaseEntity {
     @Column(name = "question_content", nullable = false, length = 3000)
     private String content;
 
+    @Column(name = "question_is_deleted_questioner")
+    private Boolean isDeletedQuestioner = false;
+
+    @Column(name = "question_is_deleted_replier")
+    private Boolean isDeletedReplier = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
@@ -51,5 +57,13 @@ public class Question extends BaseEntity {
 
     public void close(){
         this.status=QuestionStatus.CLOSED;
+    }
+
+    public void deleteArchiveQuestioner() {
+        this.isDeletedQuestioner = true;
+    }
+
+    public void deleteArchiveReplier() {
+        this.isDeletedReplier = true;
     }
 }
