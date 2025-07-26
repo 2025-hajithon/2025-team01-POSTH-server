@@ -13,4 +13,6 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
     @Query("select r from Reply r where r.question.member = :member and not r.isRead")
     List<Reply> findUnreadRepliesByQuestionAuthor(Member member);
+
+    Integer countByMember(Member member);
 }
