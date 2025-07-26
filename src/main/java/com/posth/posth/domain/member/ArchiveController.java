@@ -44,4 +44,10 @@ public class ArchiveController {
     public ResponseEntity<ReplyResponse> getMySentReplyDetail(@PathVariable Long replyId) {
         return ResponseEntity.ok(replyService.getMySentReplyDetail(replyId));
     }
+
+    @DeleteMapping("/reply/{replyId}")
+    public ResponseEntity<Void> deleteMySentReply(@PathVariable Long replyId){
+        replyService.deleteArchiveReply(replyId);
+        return ResponseEntity.noContent().build();
+    }
 }

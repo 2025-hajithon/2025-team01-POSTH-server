@@ -31,13 +31,11 @@ public class Question extends BaseEntity {
     @Column(name = "question_content", nullable = false, length = 3000)
     private String content;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "question_is_deleted_questioner")
-    private Boolean isDeletedQuestioner;
+    private Boolean isDeletedQuestioner = false;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "question_is_deleted_replier")
-    private Boolean isDeletedReplier;
+    private Boolean isDeletedReplier = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
@@ -63,5 +61,9 @@ public class Question extends BaseEntity {
 
     public void deleteArchiveQuestioner() {
         this.isDeletedQuestioner = true;
+    }
+
+    public void deleteArchiveReplier() {
+        this.isDeletedReplier = true;
     }
 }
