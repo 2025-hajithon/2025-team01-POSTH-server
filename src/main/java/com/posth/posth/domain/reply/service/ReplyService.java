@@ -7,6 +7,7 @@ import com.posth.posth.domain.reply.repository.ReplyRepository;
 import com.posth.posth.global.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class ReplyService {
     private final ReplyRepository replyRepository;
     private final AuthUtil authUtil;
 
+    @Transactional(readOnly = true)
     public List<Long> getReplies() {
         Member member = authUtil.getCurrentMember();
 
@@ -26,9 +28,11 @@ public class ReplyService {
                 .toList();
     }
 
+    @Transactional
     public ReplyResponse getReply(Long replyId) {
         Reply reply = replyRepository.findById(replyId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다."));
+        reply.read();
         return ReplyResponse.from(reply);
     }
 }

@@ -19,7 +19,7 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @GetMapping("/list")
-    public ResponseEntity<List<ReplyResponse>> getReplies() {
+    public ResponseEntity<List<Long>> getReplies() {
         var response = replyService.getReplies();
         return ResponseEntity.ok(response);
     }
