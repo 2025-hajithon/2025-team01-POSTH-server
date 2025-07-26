@@ -1,8 +1,10 @@
 package com.posth.posth.domain.question;
 
+import com.posth.posth.domain.member.Member;
 import com.posth.posth.domain.question.ENUM.QuestionCategory;
 import com.posth.posth.domain.question.dto.QuestionCreateRequest;
 import com.posth.posth.domain.question.dto.QuestionResponse;
+import com.posth.posth.global.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,18 +17,19 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.attribute.UserPrincipal;
 
 @RestController
-@RequestMapping("/questions")
+@RequestMapping("/question")
 @RequiredArgsConstructor
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final AuthUtil authUtil;
 
     @PostMapping
     public ResponseEntity<Long> createQuestion(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody QuestionCreateRequest requestDto) {
 
-        Long memberId = userPrincipal.getMemberId();
+        Member member = authUtil.getCurrentMember();
+        Long memberId = member.getId();
         Long questionId = questionService.createQuestion(memberId, requestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(questionId);
