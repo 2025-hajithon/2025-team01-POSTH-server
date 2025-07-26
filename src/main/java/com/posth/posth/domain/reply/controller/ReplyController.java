@@ -1,13 +1,12 @@
 package com.posth.posth.domain.reply.controller;
 
+import com.posth.posth.domain.reply.dto.request.ReactionCreateRequest;
 import com.posth.posth.domain.reply.dto.response.ReplyResponse;
 import com.posth.posth.domain.reply.service.ReplyService;
+import jdk.jfr.Frequency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +27,11 @@ public class ReplyController {
     public ResponseEntity<ReplyResponse> getReply(@PathVariable Long replyId) {
         var response = replyService.getReply(replyId);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{replyId}/reaction")
+    public ResponseEntity<Void> createReaction(@PathVariable Long replyId, @RequestBody ReactionCreateRequest request) {
+        replyService.createReply(replyId, request);
+        return ResponseEntity.ok().build();
     }
 }
