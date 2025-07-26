@@ -60,4 +60,8 @@ public class Question extends BaseEntity {
     public void close(){
         this.status=QuestionStatus.CLOSED;
     }
+
+    public void deleteArchiveQuestioner() {
+        this.isDeletedQuestioner = true;
+    }
 }
