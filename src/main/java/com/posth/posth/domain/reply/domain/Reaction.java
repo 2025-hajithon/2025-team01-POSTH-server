@@ -4,6 +4,9 @@ import com.posth.posth.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @ToString
@@ -44,5 +47,13 @@ public class Reaction extends BaseEntity {
                 .thankMessage(thankMessage)
                 .reply(reply)
                 .build();
+    }
+
+    public List<Integer> getGoodTypes() {
+        List<Integer> ret = new ArrayList<>();
+        for (String goodType : goodTypes.split(",")) {
+            ret.add(Integer.parseInt(goodType));
+        }
+        return ret;
     }
 }

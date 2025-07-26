@@ -5,6 +5,7 @@ import com.posth.posth.domain.reply.domain.ReactionType;
 import com.posth.posth.domain.reply.domain.Reply;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ReplyResponse(
         Long replyId,
@@ -15,12 +16,12 @@ public record ReplyResponse(
         String replierNickname,
         LocalDateTime replyAt,
         ReactionType reactionType,
-        String goodTypes,
+        List<Integer> goodTypes,
         String thankMessage
 ) {
     public static ReplyResponse from(Reply reply) {
         ReactionType reactionType = null;
-        String goodTypes = null;
+        List<Integer> goodTypes = null;
         String thankMessage = null;
 
         Reaction reaction = reply.getReaction();

@@ -73,8 +73,8 @@ public class MemberService {
             if (reaction.getReactionType().equals(ReactionType.GOOD)) {
                 recievedLikeCount++;
             }
-            for (String goodThing : reaction.getGoodTypes().split(",")) {
-                goodThingsCount[Integer.parseInt(goodThing)]++;
+            for (int goodThing : reaction.getGoodTypes()) {
+                goodThingsCount[goodThing]++;
             }
         }
 
