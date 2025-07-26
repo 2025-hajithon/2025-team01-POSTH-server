@@ -1,4 +1,4 @@
-package com.posth.posth.member;
+package com.posth.posth.member.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
