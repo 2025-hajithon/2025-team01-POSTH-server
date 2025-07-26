@@ -17,12 +17,18 @@ public class ReplyService {
     private final ReplyRepository replyRepository;
     private final AuthUtil authUtil;
 
-    public List<ReplyResponse> getReplies() {
+    public List<Long> getReplies() {
         Member member = authUtil.getCurrentMember();
 
         return replyRepository.findAllByQuestion_Member(member)
                 .stream()
-                .map(ReplyResponse::from)
+                .map(Reply::getId)
                 .toList();
+    }
+
+    public ReplyResponse getReply(Long replyId) {
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다."));
+        return ReplyResponse.from(reply);
     }
 }
