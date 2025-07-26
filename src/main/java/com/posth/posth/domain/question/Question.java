@@ -36,6 +36,7 @@ public class Question {
 //    private List<Reply> replies = new ArrayList<>();
 
 
+
     @Builder
     public Question(QuestionCategory category, String content, Member member) {
         this.category = category;
