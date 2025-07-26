@@ -7,6 +7,10 @@ import com.posth.posth.domain.question.Question;
 import com.posth.posth.domain.question.QuestionRepository;
 import com.posth.posth.domain.question.dto.QuestionCreateRequest;
 import com.posth.posth.domain.question.dto.QuestionResponse;
+import com.posth.posth.domain.question.dto.ReplyCreateRequest;
+import com.posth.posth.domain.reply.domain.Reply;
+import com.posth.posth.domain.reply.service.ReplyService;
+import com.posth.posth.global.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,13 +23,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
-    private final MemberRepository memberRepository;
+    private final ReplyService replyService;
+    private final AuthUtil authUtil;
 
     @Transactional
-    public Long createQuestion(Long memberId, QuestionCreateRequest requestDto) {
-
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+    public Long createQuestion(QuestionCreateRequest requestDto) {
+        Member member = authUtil.getCurrentMember();
 
         Question question = Question.builder()
                 .member(member)
@@ -42,4 +45,14 @@ public class QuestionService {
 
         return questions.map(QuestionResponse::new);
     }
+
+    @Transactional
+    public Long createReplyForQuestion(Long questionId, ReplyCreateRequest requestDto) {
+
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문입니다."));
+
+        return replyService.createReply(question,requestDto);
+    }
+
 }

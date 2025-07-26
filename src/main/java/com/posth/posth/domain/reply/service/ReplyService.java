@@ -1,6 +1,9 @@
 package com.posth.posth.domain.reply.service;
 
 import com.posth.posth.domain.member.Member;
+import com.posth.posth.domain.question.Question;
+import com.posth.posth.domain.question.QuestionRepository;
+import com.posth.posth.domain.question.dto.ReplyCreateRequest;
 import com.posth.posth.domain.reply.domain.Reply;
 import com.posth.posth.domain.reply.dto.response.ReplyResponse;
 import com.posth.posth.domain.reply.repository.ReplyRepository;
@@ -34,5 +37,19 @@ public class ReplyService {
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다."));
         reply.read();
         return ReplyResponse.from(reply);
+    }
+
+    @Transactional
+    public Long createReply(Question question, ReplyCreateRequest requestDto) {
+        Member member = authUtil.getCurrentMember();
+
+        Reply reply = Reply.builder()
+                .content(requestDto.getContent())
+                .question(question)
+                .member(member)
+                .build();
+
+        replyRepository.save(reply);
+        return reply.getId();
     }
 }

@@ -4,13 +4,13 @@ import com.posth.posth.domain.common.BaseEntity;
 import com.posth.posth.domain.member.Member;
 import com.posth.posth.domain.question.Question;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Reply extends BaseEntity {
 
     @Id

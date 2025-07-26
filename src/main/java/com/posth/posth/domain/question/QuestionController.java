@@ -4,6 +4,8 @@ import com.posth.posth.domain.member.Member;
 import com.posth.posth.domain.question.ENUM.QuestionCategory;
 import com.posth.posth.domain.question.dto.QuestionCreateRequest;
 import com.posth.posth.domain.question.dto.QuestionResponse;
+import com.posth.posth.domain.question.dto.ReplyCreateRequest;
+import com.posth.posth.domain.reply.service.ReplyService;
 import com.posth.posth.global.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,20 +24,17 @@ import java.nio.file.attribute.UserPrincipal;
 public class QuestionController {
 
     private final QuestionService questionService;
-    private final AuthUtil authUtil;
 
     @PostMapping
     public ResponseEntity<Long> createQuestion(
             @RequestBody QuestionCreateRequest requestDto) {
 
-        Member member = authUtil.getCurrentMember();
-        Long memberId = member.getId();
-        Long questionId = questionService.createQuestion(memberId, requestDto);
+        Long questionId = questionService.createQuestion(requestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(questionId);
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<Page<QuestionResponse>> getQuestionsByCategory(
             @RequestParam("category") QuestionCategory category,
             @RequestParam(value = "page", defaultValue = "0") int page) {
@@ -44,5 +43,15 @@ public class QuestionController {
         Page<QuestionResponse> questions = questionService.getQuestionsByCategory(category, pageable);
 
         return ResponseEntity.ok(questions);
+    }
+
+    @PostMapping("/{questionId}/reply")
+    public ResponseEntity<Long> createReply(
+            @PathVariable Long questionId,
+            @RequestBody ReplyCreateRequest requestDto) {
+
+        Long replyId = questionService.createReplyForQuestion(questionId,requestDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(replyId);
     }
 }
