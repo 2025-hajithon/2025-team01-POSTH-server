@@ -52,7 +52,11 @@ public class Reaction extends BaseEntity {
     public List<Integer> getGoodTypes() {
         List<Integer> ret = new ArrayList<>();
         for (String goodType : goodTypes.split(",")) {
-            ret.add(Integer.parseInt(goodType));
+            try {
+                ret.add(Integer.parseInt(goodType));
+            } catch (NumberFormatException e) {
+                continue;
+            }
         }
         return ret;
     }
