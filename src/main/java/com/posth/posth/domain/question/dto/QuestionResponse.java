@@ -17,6 +17,7 @@ public class QuestionResponse {
     private QuestionCategory category;
     private String content;
     private String authorNickname;
+    private LocalDateTime createdAt;
     private String replyContent;
     private LocalDateTime replyAt;
     private String replierNickname;
@@ -29,6 +30,7 @@ public class QuestionResponse {
         this.category = question.getCategory();
         this.content = question.getContent();
         this.authorNickname = question.getMember().getNickname();
+        this.createdAt = question.getCreatedAt();
 
         Reply reply = question.getReply();
         if (reply != null) {
